@@ -40,16 +40,24 @@
 
 4. 编写第一个Flutter应用：scaffold_demo
 
-   1. 组件：Scaffold、AppBar、Text、IconButton、Icon、Icons(https://design.google.com/icons/)、Text、TextStyle、FontWeight、List、ListView、EdgeInsets、ListTile、Center、BottomNavigationBar、MaterialPageRoute
+   1. 组件：
 
+      ```dart
+   基础组件：Text、IconButton、Icon、Icons(https://design.google.com/icons/)、Text、TextStyle、FontWeight
+      布局类组件：Scaffold、AppBar、BottomNavigationBar
+   可滚动组件：List、ListView、EdgeInsets、ListTile
+      布局类组件：Center
+      功能型组件：MaterialPageRoute、GestureDetector
+      ```
+   
    2. 路由管理
-
+   
       核心概念：**`Route`和`Navigator`**
-
+   
       - 路由（`Route`）在移动开发中通常指页面（`Page`），比如在`Android`中通常指一个`Activity`，所谓路由管理，就是管理页面之间如何跳转，通常也可被称导航管理
-      
+   
       - `Navigator`是一个路由管理的组件，它提供了打开和退出路由页方法。`Navigator`通过一个栈来管理活动路由集合。通常当前屏幕显示的页面就是栈顶的路由。
-      
+   
         ```dart
         1. Future push(BuildContext context, Route route)
             将给定的路由入栈（即打开新的页面），返回值是一个Future对象，用以接收新路由出栈（即关闭）时的返回数据
@@ -60,11 +68,11 @@
         实例方法：
             Navigator.push(BuildContext context, Route route)等同于Navigator.of(context).push(Route route)
         ```
-      
+   
       `MaterialPageRoute`类
-      
+   
       `MaterialPageRoute`继承自`PageRoute`类，`PageRoute`类是一个抽象类，表示占有整个屏幕空间的一个模态路由页面，它还定义了路由构建及切换时过渡动画的相关接口及属性。`MaterialPageRoute` 是Material组件库提供的组件，它可以针对不同平台，实现与平台页面切换动画风格一致的路由切换动画
-      
+   
       ```dart
         MaterialPageRoute({
           WidgetBuilder builder,
@@ -73,22 +81,23 @@
           bool fullscreenDialog = false,
         })
       ```
-      
+   
       - `builder` 是一个WidgetBuilder类型的回调函数，它的作用是构建路由页面的具体内容，返回值是一个widget。我们通常要实现此回调，返回新路由的实例。
       - `settings` 包含路由的配置信息，如路由名称、是否初始路由（首页）。
       - `maintainState`：默认情况下，当入栈一个新路由时，原来的路由仍然会被保存在内存中，如果想在路由没用的时候释放其所占用的所有资源，可以设置`maintainState`为false。
       - `fullscreenDialog`表示新的路由页面是否是一个全屏的模态对话框，在iOS中，如果`fullscreenDialog`为`true`，新页面将会从屏幕底部滑入（而不是水平方向）。
-      
+   
       基本路由
-      
+   
       命名路由
-      
+   
       1. 注册路由表：新建routes.dart文件
       2. 配置main.dart
       3. 配置路由传参
       4. 配置路由守卫
-      
+   
       路由生成钩子
+   
    3. 包管理
    
       `pubspec.yaml`：管理第三方依赖包
@@ -99,7 +108,13 @@
    
    4. 资源管理
    
-5. Dart 语言简介
+5. 状态管理：
+
+   - Widget管理自己的状态
+   - Widget管理子Widget的状态
+   - 混合管理（父Widget和子Widget都管理状态）
+
+6. Dart 语言简介
 
    ```dart
    1.var;//关键词，可以接收任何类型的变量，Dart中var变量一旦赋值，类型便会确定，则不能再改变其类型(Dart是一个强类型语言，区别js)
