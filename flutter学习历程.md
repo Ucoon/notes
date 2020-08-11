@@ -43,10 +43,10 @@
    1. 组件：
 
       ```dart
-   基础组件：Text、IconButton、Icon、Icons(https://design.google.com/icons/)、Text、TextStyle、FontWeight
-      布局类组件：Scaffold、AppBar、BottomNavigationBar
+   基础组件：Text、IconButton、Icon、Icons(https://design.google.com/icons/)、Text、TextStyle、FontWeight、Form、TextFormField、SizedBox、RaisedButton
+      布局类组件：Scaffold、AppBar、BottomNavigationBar、Center、Row、Column
    可滚动组件：List、ListView、EdgeInsets、ListTile
-      布局类组件：Center
+      容器类组件：Padding、EdgeInsets、SizedBox
       功能型组件：MaterialPageRoute、GestureDetector
       ```
    
@@ -108,11 +108,18 @@
    
    4. 资源管理
    
-5. 状态管理：
+5. Widget状态(```State```)管理：
 
-   - Widget管理自己的状态
-   - Widget管理子Widget的状态
-   - 混合管理（父Widget和子Widget都管理状态）
+   概念：
+
+   - 短时状态（用户界面(UI)状态或者局部状态）：可以完全包含在一个独立widget的状态
+   - 应用状态（共享状态）：如果你想在你的应用中多个部分之间共享一个非短时的状态，并在用户会话期间保留这个状态，我们称之为应用状态
+
+   1. **setState**：适用较小规模widget的暂时性状态的基础管理办法：
+      - Widget管理自己的状态
+      - Widget管理子Widget的状态
+      - 混合管理（父Widget和子Widget都管理状态）
+   2. **Provider**：推荐的管理方式
 
 6. Dart 语言简介
 
@@ -174,3 +181,5 @@
 https://flutterchina.club/setup-windows/
 
 https://book.flutterchina.club/chapter1/dart.html
+
+https://flutter.cn/docs/development/data-and-backend/state-mgmt/options
