@@ -238,6 +238,36 @@ class Visibility extends StatelessWidget {
 3. 对于offscreen：用Offstage widget包裹使得widget在屏幕外显示
 4. 直接返回没有大小初始值container widget，可以根据需要自行更改另外的widget
 
+## flutter dio json解析
+
+针对复杂json解析会造成卡顿问题，dio给出的方案是使用`compute`方法在后台去解析json
+
+```dart
+// 必须是顶层函数
+_parseAndDecode(String response) {
+  return jsonDecode(response);
+}
+
+parseJson(String text) {
+  return compute(_parseAndDecode, text);
+}
+
+void main() {
+  ...
+  // 自定义 jsonDecodeCallback
+  (dio.transformer as DefaultTransformer).jsonDecodeCallback = parseJson;
+  runApp(MyApp());
+}
+```
+
+
+
+参考：https://juejin.im/post/6854573217995030541
+
+## flutter国际化插件Flutter Intl
+
+https://juejin.im/post/6844903823119482888#heading-0
+
 # 遇到的问题
 
 1. flutter running gradle task 'assembledebug' 卡住：
