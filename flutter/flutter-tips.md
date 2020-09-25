@@ -260,6 +260,12 @@ void main() {
 }
 ```
 
+- Json数据自动生成实体类方式推荐
+
+1. 使用网页自动生成： https://app.quicktype.io/
+
+2. 使用 json_serializable（官方推荐：https://github.com/google/json_serializable.dart/tree/master/example）
+
 
 
 参考：https://juejin.im/post/6854573217995030541
@@ -267,6 +273,14 @@ void main() {
 ## flutter国际化插件Flutter Intl
 
 https://juejin.im/post/6844903823119482888#heading-0
+
+## flutter插件化开发  EventChannel && MethodChannel
+
+参考：https://cloud.tencent.com/developer/article/1568736
+
+>MethodChannel用通俗的语言来描述它的作用就是，当你想在flutter端调用native功能的时候，可以用它
+>
+>EventChannell用通俗的语言来描述就是，当native想通知flutter层一些消息的时候，可以用它
 
 # 遇到的问题
 
@@ -308,7 +322,9 @@ https://juejin.im/post/6844903823119482888#heading-0
    flutter create --org com.packagename projectname
    ```
 
+5. Flutter 设备连接一直显示loading...
 
+   连接网络！连接网络！连接网络！
 
 # 常用flutter命令
 
@@ -317,6 +333,33 @@ https://juejin.im/post/6844903823119482888#heading-0
 3. `flutter run -d chrome`：部署web应用
 4. `flutter create .`：向现有应用添加 Web 支持
 5. ```flutter packages get```：获取项目所需依赖
+6. `flutter clean`：清除缓存
+
+# 常用第三方库
+
+```yaml
+  cupertino_icons: ^0.1.3
+  dio: ^3.0.1
+  dio_cookie_manager: ^1.0.0
+  cookie_jar: ^1.0.0
+  flutter_webview_plugin: 0.3.0+2
+  crypto: ^2.0.6
+  permission_handler: ^5.0.1+1
+  # 本地json对象存储
+  shared_preferences: ^0.5.3+5
+  path_provider: ^1.6.11
+  # State
+  provider: 4.0.3
+  #UI
+  oktoast: ^2.3.1
+  badges: ^1.1.0
+  #设备信息
+  device_info: ^0.4.2+6
+  #uuid
+  uuid: ^2.2.0
+  #package info
+  package_info: ^0.4.1  
+```
 
 # 参考
 
