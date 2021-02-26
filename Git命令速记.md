@@ -75,7 +75,9 @@ title: Git命令速记
   git branch --set-upstream-to origin/newName 把修改后的本地分支与远程分支关联
   ```
 
-  
+- Git - .gitignore怎么忽略已经被版本控制的文件
+
+  使用命令`git rm --cached filename`，然后将该文件写入`.gitignore`中即可。
 
 **常见错误**
 
