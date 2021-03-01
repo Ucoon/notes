@@ -26,11 +26,52 @@
 
       **createState()**：createState是`StatefulWidget`里创建State的方法，当要创建新的`StatefulWidget`的时候，会立即执行createState，而且只执行一次；但是它在`StatefulWidget`的生命周期中可能会被多次调用。例如，当一个`StatefulWidget`同时插入到widget树的多个位置时，Flutter framework就会调用该方法为每一个位置生成一个独立的State实例
 
-      **initState()**：当`Widget`第一次插入到`Widget`树时会被调用，对于每一个State对象，Flutter framework只会调用一次该回调，所以，通常在该回调中做一些一次性的操作，如状态初始化，订阅子树的事件通知等。不能在该回调中调用`BuildContext.dependOnInheritedWidgetOfExactType`（该方法用于在Widget树上获取离当前widget最近的一个父级`InheritFromWidget`）,原因是在初始化完成后，`Widget树中的IheritFromWidget`也可能会发生变化，正确的做法应该在`build()`或`didChangeDependencies()`中调用它。
+      **initState()**：当`Widget`第一次插入到`Widget`树时会被调用，对于每一个State对象，Flutter framework只会调用一次该回调，所以，通常在该回调中做一些一次性的操作，如状态初始化，订阅子树的事件通知等。不能在该回调中调用`BuildContext.dependOnInheritedWidgetOfExactType`（该方法用于在Widget树上获取离当前widget最近的一个父级`InheritWidget`）,原因是在初始化完成后，`Widget树中的IheritWidget`也可能会发生变化，正确的做法应该在`build()`或`didChangeDependencies()`中调用它。
 
+      **didChangeDependencies()**：当State对象的依赖发生变化时会被调用；例如：在之前`build()`中包含了一个`InheritedWidget`，然后在之后的`build()`中`InheritedWidget`发生了变化，那么此时`InheritedWidget`的子`widget`的`didChangeDependencies()`回调都会被调用。典型的场景是当系统语言Locale或者应用主题改变时，Flutter framework会通知widget调用此回调。
       
+      **build()**：主要是用于构建Widget子树的，在如下场景会被调用：
+      
+      - 在调用`initState()`之后
+      - 在调用`didUpdateWidget()`之后
+      - 在调用`setState()`之后
+      - 在调用`didChangeDependencies()`之后
+      - 在State对象从树中一个位置移除后（会调用`deactivate`）又重新插入到树的其他位置之后
+      
+      **reassemble()**：此回调是专门为了开发调试而提供的，在热重载（`hot reload`）时会被调用，此回调在Release模式下永远不会被调用。
+      
+      **didUpdateWidget()**：在widget重新构建时，Flutter framework会调用`Widget.canUpdate`来检测Widget树中同一个位置的新旧节点，然后决定是否需要更新，如果`Widget.canUpdate`返回`true`则会调用此回调。（`Widget.canUpdate`会在新旧widget的key和runtimeType同时相等时返回true）
+      
+      **deactivate()**：当State对象从树中被移除时，会调用此回调。在一些场景下，Flutter framework会将State对象重新插入到树中，如包含此State对象的子树在树的一个位置移动到另一个位置时（可以通过GlobalKey来实现），如果移除后没有重新插入到树中则紧接着会调用`dispose`方法。
+      
+      **dispose()**：当State对象从树中被永久移除时调用；通常在此回调中释放资源。
 
 2. App的生命周期
+
+   通过`WidgetsBindingObserver`可以获取Flutter App的生命周期：
+
+   ```dart
+     ///生命周期变化时回调
+     ///resumed:应用可见并可响应用户操作(处于前台)
+     ///inactive:用户可见，但不可响应用户操作
+     ///paused:已经暂停了，用户不可见、不可操作（处于后台）
+     ///detached：应用被挂起
+     @override
+     void didChangeAppLifecycleState(AppLifecycleState state) {
+       switch (state) {
+         case AppLifecycleState.resumed:
+           break;
+         case AppLifecycleState.inactive:
+           break;
+         case AppLifecycleState.paused:
+           break;
+         case AppLifecycleState.detached:
+           break;
+       }
+     }
+   ```
+
+   
 
 ### Flutter 三棵树：Widget、Element、RenderObject
 
