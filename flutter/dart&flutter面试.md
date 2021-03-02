@@ -46,6 +46,12 @@
       
       **dispose()**：当State对象从树中被永久移除时调用；通常在此回调中释放资源。
 
+   ```dart
+   为什么要将build方法放在State中，而不是放在StatefulWidget中？
+   1. 状态访问不便。
+   2. 继承StatefulWidget不便
+   ```
+
 2. App的生命周期
 
    通过`WidgetsBindingObserver`可以获取Flutter App的生命周期：
@@ -73,11 +79,89 @@
 
    
 
-### Flutter 三棵树：Widget、Element、RenderObject
+### Flutter三层架构：`Framework`、`Engine`、`Embedder`
+
+![flutter_system_overview](http://ucoon.gitee.io/myblogimg/flutter_system_overview.png)
+
+1. Framework
+
+   Framework使用dart实现，包括Material Design风格的Widget，CuperTino风格的Widget，文本/图片/按钮等基础的Widgets，`Rendering`渲染、`Animation`动画、`Painting`图形绘制、`Gestures`手势等。
+
+2. Engine
+
+   Engine引擎层使用C++实现，主要包括：Skia，Dart和Text。Skia是开源的二维图形库，提供了适用于多种软硬件平台的通用API
+
+3. Embedder
+
+   Embedder是一个嵌入层，即把Flutter嵌入到各个平台上去，这里做的主要工作包括渲染Surface设置，线程设置，以及插件等。从这里可以看出，Flutter的平台相关层很低，平台只是提供一个画布，剩余的所有渲染相关的逻辑都在Flutter内部，这就使得它具有了很好的跨端一致性。
+
+### Flutter 三棵树：Widget树、Element树、RenderObject树
+
+#### 依赖关系
+
+当应用启动时Flutter会遍历并创建所有的Widget会形成Widget Tree，同时与Widget Tree相对应，通过调用Widget上的`createElement()`创建每个Element对象，形成Element Tree，最后调用Element的`createRenderObject()`创建每个渲染对象，形成一个Render Tree（“渲染树”），总结一下，我们可以认为Fluuter的UI系统包含三棵树：Widget树，Element树、渲染树。他们的依赖关系是：Element树根据Widget树生成，而渲染树又依赖于Element树。
+
+![依赖关系](https://upload-images.jianshu.io/upload_images/24924109-0d3c0dc4a2b7798b.png?imageMogr2/auto-orient/strip|imageView2/2/w/644/format/webp)
+
+#### Widget
 
 1. 在Flutter中，`Widget`的功能是“描述一个UI元素的配置数据”；
+
+   ```dart
+   /// Widgets are the central class hierarchy in the Flutter framework. A widget
+   /// is an immutable description of part of a user interface. Widgets can be
+   /// inflated into elements, which manage the underlying render tree.
+   在Flutter中，Widget的功能是“描述一个UI元素的配置数据”，所以它是不可变的，变的是Widget里面的状态，也就是State。
+   ```
+
 2. Flutter中真正代表屏幕上显示元素的类是`Element`，也就是说`Widget`只是描述`Element`的配置数据；
+
 3. Widget只是UI元素的一个配置数据，并且一个`Widget`可以对应多个`Element`，这个很好理解，根据同一份配置（`Widget`），可以创建多个实例（`Element`）。
+
+```dart
+@immutable
+abstract class Widget extends DiagnosticableTree {
+  const Widget({ this.key });
+  final Key key;
+
+  @protected
+  Element createElement();
+
+  @override
+  String toStringShort() {
+    return key == null ? '$runtimeType' : '$runtimeType-$key';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.defaultDiagnosticsTreeStyle = DiagnosticsTreeStyle.dense;
+  }
+
+  static bool canUpdate(Widget oldWidget, Widget newWidget) {
+    return oldWidget.runtimeType == newWidget.runtimeType
+        && oldWidget.key == newWidget.key;
+  }
+}
+```
+
+- Widget类继承自`DiagnosticableTree`，`DiagnosticableTree`即“诊断树”，主要作用是提供调试信息
+- `key`：这个`key`的主要作用是决定是否在下一次Build时复用旧的widget，决定的条件在`canUpdate()`中
+- `canUpdate()`：只要`newWidget`与`oldWidget`的`runtime`和`key`同时相等时就会用`newWidget`去更新`Element`对象的配置，否则就会创建新的`Element`
+
+#### Element
+
+Element的生命周期如下：
+
+1. 
+
+### Flutter路由跳转、开源框架(Fluro)及页面切换监视
+
+### Flutter页面数据刷新Provider
+
+
+
+
 
 
 
