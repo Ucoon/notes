@@ -151,13 +151,79 @@ abstract class Widget extends DiagnosticableTree {
 
 #### Element
 
+Element是Widget在UI树具体位置的一个实例化对象，大多数Element只有唯一的`renderObject`，但是还有一些Element会有多个子节点，如继承自`RenderObjectElement`的一些类，比如`MultiChildRenderObjectElement`。
+
 Element的生命周期如下：
 
-1. 
+1. Framework调用`Widget.createElement`创建一个Element实例，记为`element`
+2. Framework调用`element.mount(parent, newSlot)`，mount()中首先调用`element`所对应Widget的`createRenderObject`方法创建与`element`相关联的RenderObject对象，然后调用`element.attachRenderObject`方法将`element.renderObject`添加到渲染树中插槽指定的位置（这一步不是必须的，一般发生在Element树结构发生变化时才需要重新attach）。插入到渲染树后的`element`就处于“active”状态，处于“active”状态后就可以显示在屏幕上了（可以隐藏）。
+3. 当有父Widget的配置数据改变时，同时其`State.build`返回的Widget结构与之前不同，此时就需要重新构建对应的Element树，为了进行Element复用，在Element重新构建前会先尝试是否可以复用旧树上相同位置的element，element节点在更新前都会调用其对应Widget的`canUpdate`方法，如果返回`true`，则复用旧Element，旧的Element会使用新Widget配置数据更新，反之则会创建一个新的Element。`Widget.canUpdate`主要是判断`newWidget`与`oldWidget`的`runtimeType`和`key`是否同时相等，如果同时相等就返回`true`，否则就会返回`false`。根据这个原理，当我们需要强制更新一个Widget时，可以通过指定不同的Key来避免复用
+4. 当有父级Element决定要移除`element`时（如Widget树结构发生了变化，导致`element`对应的Widget被移除），这时父级Element就会调用`deactivateChild`方法来移除它，移除后`element.renderObject`也会被渲染树中移除，然后Framework会调用`element.deactivate`方法，这时`element`状态会变成“inactive”状态。
+5. “inactive”态的element将不会再显示到屏幕。为了避免在一次动画执行过程中反复创建、移除某个特定element，“inactive”态的element在当前动画最后一帧结束前都会保留，如果在动画执行结束后它还未能重新变成“active”状态，Framework就会调用其`unmount`方法将其彻底移除，这时element的状态为`defunct`，它将永远不会再被插入到树中。
+6. 如果`element`要重新插入到Element树的其他位置，如`element`或`element`的父级拥有一个GlobalKey(用于全局复用元素），那么Framework会先将element从现有位置移除，然后再调用其`activate`方法，并将其`renderObject`重新attach到渲染树。
+
+![element_生命周期](http://ucoon.gitee.io/myblogimg/element_%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg)
+
+#### RenderObject
+
+`RenderObject`的主要职责是布局（Layout）和绘制，所有的`RenderObject`会组成一棵渲染树`Render Tree`。`RenderObject`是渲染树中的一个对象，它拥有一个`parent`和一个`parentData`插槽（`slot`），所谓插槽就是指预留的一个接口或位置，这个接口和位置是由其他对象来接入或占据的，这个接口或位置在软件中通常用预留变量来表示，而`parentData`正是一个预留变量，它正是由`parent`来赋值。`parent`通常会通过子`RenderObject`的`parentData`存储一些和子元素相关的数据。
+
+```dart
+constraints; //从父级传递给它的约束
+parentData;//其父对象附加的有用的信息
+performLayout();//计算此渲染对象的布局
+paint();//绘制该组件及其子组件
+```
+
+##### 布局过程
+
+1. 从顶部向下传递约束**Constraints**
+
+   ```dart
+   void layout(Constraints constraints, { bool parentUsesSize = false }) {
+      ...
+      RenderObject relayoutBoundary; 
+       if (!parentUsesSize || sizedByParent || constraints.isTight 
+           || parent is! RenderObject) {
+         relayoutBoundary = this;
+       } else {
+         final RenderObject parent = this.parent;
+         relayoutBoundary = parent._relayoutBoundary;
+       }
+       ...
+       if (sizedByParent) {
+           performResize();
+       }
+       performLayout();
+       ...
+   }
+   ```
+
+   `layout()`需传入两个参数，第一个为`constraints`，即父节点对子节点大小的限制，该值根据父节点的布局逻辑确定；另一个参数是`parentUsesSize`，该值用于确定`relayoutBoundary`，该参数表示子节点布局变化是否影响父节点，如果为true，当子节点布局发生变化时，父节点都会标记为需要重新布局，如果为false，则子节点布局发生变化后不会影响父节点。
+
+2. 从底部向上传递布局信息
+
+   这一过程用来传递具体的布局信息。子节点接受到来自父节点的约束后，会依据它产生自己具体的布局信息，如父节点规定我的最小宽度是 500 的单位像素，子节点按照这个规则可能定义自己的宽度为 500 个像素，或者大于 500 像素的任何一个值。这样，确定好自己的布局信息之后，将这些信息告诉父节点。父节点也会继续此操作向上传递一直到最顶部。
+
+##### 绘制过程
+
+`RenderObject`可以通过`paint()`方法来完成具体的绘制逻辑，流程和布局流程相似，子类可以实现`paint()`方法来完成自身的绘制逻辑，`paint()`签名如下：
+
+```dart
+void paint(PaintingContext context, Offset offset) { }
+```
+
+通过context.canvas可以获取到`Canvas`对象，接下来就可以调用`Canvas`API来实现具体的绘制逻辑。如果节点有子节点，它除了完成自身绘制逻辑之外，还要调用子节点的绘制方法
 
 ### Flutter路由跳转、开源框架(Fluro)及页面切换监视
 
 ### Flutter页面数据刷新Provider
+
+### 插件设计
+
+### dio网络请求封装
+
+
 
 
 
