@@ -77,7 +77,6 @@
      }
    ```
 
-   
 
 ### Flutter三层架构：`Framework`、`Engine`、`Embedder`
 
@@ -240,7 +239,7 @@ void paint(PaintingContext context, Offset offset) { }
 
 #### Consumer
 
-
+`ChangeNotifier`实例已经通过`ChangeNotifierProvider`在应用中与widget相关联。
 
 ### 插件设计
 
