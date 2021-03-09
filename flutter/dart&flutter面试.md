@@ -219,6 +219,29 @@ void paint(PaintingContext context, Offset offset) { }
 
 ### Flutter页面数据刷新Provider
 
+状态管理的原则：如果状态是组件私有的，则应该由组件自己管理；如果状态要跨组件共享，则该状态应该由各个组件共同的父元素来管理。
+
+三个概念：
+
+- `ChangeNotifier`
+- `ChangeNotifierProvider`
+- `Consumer`
+
+#### ChangeNotifier
+
+`ChangeNotifier`是Flutter SDK中的一个简单的类，它用于向监听器发送通知。换言之，如果被定义为`ChangeNotifier`，你可以订阅它的状态变化（类似观察者模式）。`notifyListeners()`：当模型发生改变并且需要更新UI的时候可以调用该方法。
+
+#### ChangeNotifierProvider
+
+1. `ChangeNotifierProvider` 可以向其子孙节点暴露一个`ChangeNotifier`实例。
+2. `ChangeNotifierProvider`的位置：在需要访问它的widget之上。
+3. `ChangeNotifierProvider`不会重复实例化`ChangeNotifier`实例，如果该实例已经不会再被调用，`ChangeNotifierProvider`也会自动调用`ChangeNotifier`实例的`dispose()`方法。
+4. 如果需要提供更多状态，可以使用`MultiProvider`
+
+#### Consumer
+
+
+
 ### 插件设计
 
 ### dio网络请求封装
