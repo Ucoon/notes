@@ -18,7 +18,7 @@ title:flutter-tips
 
 3. Flutter在构建页面时，会调用组件的`build`方法，widget的主要工作是提供一个build()方法来描述如何构建UI界面（通常是通过组合、拼装其它基础widget）
 
-3. `setState`：通知Flutter框架，有状态发生了改变，Flutter框架收到通知后，会执行`build`方法来根据新的状态重新构建界面
+4. `setState`：通知Flutter框架，有状态发生了改变，Flutter框架收到通知后，会执行`build`方法来根据新的状态重新构建界面
 
    1. 在调用`initState()`之后。
    2. 在调用`didUpdateWidget()`之后。
@@ -26,7 +26,6 @@ title:flutter-tips
    4. 在调用`didChangeDependencies()`之后。
    5. 在State对象从树中一个位置移除后（会调用deactivate）又重新插入到树的其它位置之后。
 
-   
 
 
 # 杂记
@@ -332,8 +331,9 @@ https://juejin.im/post/6844903823119482888#heading-0
 2. `flutter config --enable-web`：开启web支持
 3. `flutter run -d chrome`：部署web应用
 4. `flutter create .`：向现有应用添加 Web 支持
-5. ```flutter packages get```：获取项目所需依赖
-6. `flutter clean`：清除缓存
+5. `flutter packages get`或`pub get`：获取pubspec.yaml文件中列出的所需依赖
+6. `flutter packages upgrade`或`pub upgrade`获取pubspec.yaml文件中列出的所有依赖的最新版本
+7. `flutter clean`：清除缓存
 
 # 常用第三方库
 
