@@ -216,15 +216,26 @@ void paint(PaintingContext context, Offset offset) { }
 
 ### Flutter路由跳转、开源框架(Fluro)及页面切换监视
 
-### Flutter页面数据刷新Provider
+### Flutter页面数据刷新(Provider mvvm)
 
 状态管理的原则：如果状态是组件私有的，则应该由组件自己管理；如果状态要跨组件共享，则该状态应该由各个组件共同的父元素来管理。
 
 三个概念：
 
+- `Provider`
+
 - `ChangeNotifier`
 - `ChangeNotifierProvider`
+- `ChangeNotifierProxyProvider`
+- 其他类型的`Provider`
 - `Consumer`
+- `selector`
+
+#### Provider
+
+最基础的`provider`，它会获取一个值并将它暴露出来，但是该值改变时，并不会更新widget
+
+`Provider.of<CartModel>(context, listen: false);`
 
 #### ChangeNotifier
 
@@ -237,9 +248,74 @@ void paint(PaintingContext context, Offset offset) { }
 3. `ChangeNotifierProvider`不会重复实例化`ChangeNotifier`实例，如果该实例已经不会再被调用，`ChangeNotifierProvider`也会自动调用`ChangeNotifier`实例的`dispose()`方法。
 4. 如果需要提供更多状态，可以使用`MultiProvider`
 
+#### ChangeNotifierProxyProvider
+
+如果需要同时监听一个数据model的改变来自动更新UI，并且某个数据model的改变依赖于另一个model类，那么应该使用`ChangeNotifierProxyProvider`
+
+#### 其他类型的provider
+
+- `ListenableProvider`：用于暴露可监听的对象，该`provider`将会监听对象的改变以便及时更新组件状态
+- `ValueListenableProvider`：监听一个可被监听的值，并只暴露`ValueListenable.value`方法
+- `StreamProvider`：监听一个流，并暴露出其最近发送的值
+- `FutureProvider`：接受一个`Future`作为参数，在这个`Future`完成时更新依赖
+
 #### Consumer
 
-`ChangeNotifier`实例已经通过`ChangeNotifierProvider`在应用中与widget相关联。
+`ChangeNotifier`实例已经通过`ChangeNotifierProvider`在应用中与widget相关联，通过`Consumer`即可开始调用它。
+
+```dart
+return Consumer<CartModel>(
+    builder:(context, cart, child){
+        return Text("Total price: ${cart.totalPrice}");
+    }
+);
+```
+
+1. 必须指定要访问的模型类型
+
+2. `Consumer`唯一必须的参数就是builder。当`ChangeNotifier`发生变化的时候就会调用builder这个函数。
+
+   builder参数解析
+
+   1. cart：`ChangeNotifier`的实例，可通过该实例定义UI的内容
+   2. `child`：用于优化目的
+
+#### selector
+
+```dart
+class Selector<A, S> extends Selector0<S>{
+    Selector({
+        Key key,
+        @required ValueWidgetBuilder<S> builder,
+        @required S Function(BuildContext, A) selector,
+        ShouldRebuild<S> shouldRebuild,
+        Widget child,
+    }) : assert(selector != null),
+    	 super(
+             key: key,
+             shouldRebuild: shouldRebuild,
+             builder: builder,
+             selector: (context) => selector(context, Provider.of(context)),
+             child: child,
+         );
+}
+```
+
+- `Selector`相当于`Consumer`，但是可以在某些值不变的情况下，防止rebuild
+
+- `selector()`：`Selector`使用`Provider.of`获取共享的数据。数据作为`selector`方法的入参A，执行`selector`方法，返回build需要的数据S，返回的数据要尽可能少，能满足build就好
+
+- `shouldRebuild`：默认判断前后两次S相等性，来决定是否rebuild。并且也提供了自定义的`shouldRebuild`方法来判断，参数是前后两次S
+
+- S：selector的数据，必须是immutable(不可变)的，因此，selector通常返回集合或覆盖了“==”的类。如果需要selector多个值，推荐tuple
+
+  >immutable：一个类的对象在通过构造方法创建后如果状态不会再被改变，那么它就是一个不可变(immutable)类，它的所有成员变量的赋值仅在构造方法中完成，不会提供任何setter方法供外部类去修改
+
+
+
+#### MVVM状态管理
+
+
 
 ### 插件设计
 
