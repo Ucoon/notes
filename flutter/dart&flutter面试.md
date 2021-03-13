@@ -216,6 +216,11 @@ void paint(PaintingContext context, Offset offset) { }
 
 ### Flutter路由跳转、开源框架(Fluro)及页面切换监视
 
+#### Route和Navigator
+
+- 路由（`Route`）在移动开发中通常指页面（`Page`），比如在`Android`中通常指一个`Activity`，所谓路由管理，就是管理页面之间如何跳转，通常也可被称为导航管理。
+- 导航管理会维护一个路由栈，路由入栈(push)操作对应打开一个新页面，路由出栈(pop)操作对应关闭页面操作
+
 ### Flutter页面数据刷新(Provider mvvm)
 
 状态管理的原则：如果状态是组件私有的，则应该由组件自己管理；如果状态要跨组件共享，则该状态应该由各个组件共同的父元素来管理。
