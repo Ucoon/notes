@@ -219,7 +219,30 @@ void paint(PaintingContext context, Offset offset) { }
 #### Route和Navigator
 
 - 路由（`Route`）在移动开发中通常指页面（`Page`），比如在`Android`中通常指一个`Activity`，所谓路由管理，就是管理页面之间如何跳转，通常也可被称为导航管理。
-- 导航管理会维护一个路由栈，路由入栈(push)操作对应打开一个新页面，路由出栈(pop)操作对应关闭页面操作
+
+- 导航管理会维护一个路由栈，路由入栈(push)操作对应打开一个新页面，路由出栈(pop)操作对应关闭页面操作；`Navigator`是一个路由管理的组件，它提供了打开和退出路由页的方法，`Navigator`通过一个栈来管理活动路由集合，通常当前屏幕显示的页面就是栈顶的路由
+
+  ```dart
+  Future push(context, route):将给定的路由入栈（即打开新的页面），返回值是一个Future对象，用以接收新路由出栈（即关闭）时的返回数据
+  bool pop(context, [result]):将栈顶路由出栈，result为页面关闭时返回给上一个页面的数据
+  ```
+
+- 实例代码（入栈）：
+
+  ```dart
+  await Navigator.push(context, MaterialPageRoute(
+      settings: routeSettings,
+      fullscreenDialog: fullscreenDialog,
+      maintainState: maintainState,
+      builder:(context){}
+  ));
+  ```
+
+  `MaterialPageRoute`继承自`PageRoute`类，`PageRoute`类是一个抽象类，表示占有整个屏幕空间的一个模态路由页面，它还定义了路由构建及切换时过渡动画的相关接口以及属性：
+
+  - `settings`包含路由的配置信息，如路由名称，是否是初始路由（首页）
+  - `fullscreenDialog`表示新的路由页面是否是一个全屏的模态对话框，默认为false
+  - `maintainState`：默认情况下，当入栈一个新路由时
 
 ### Flutter页面数据刷新(Provider mvvm)
 
