@@ -92,7 +92,6 @@ git pull
 解决办法二：舍弃本地代码，远端版本覆盖本地版本
 git fetch --all
 git reset --hard origin/master
-git fecth
 ```
 
 2. ```git pulll```更新代码，遇到如下问题：

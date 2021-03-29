@@ -4,9 +4,14 @@
 >
 >Flutter目标是使开发人员能够交付在不同平台上都感觉自然流畅的高性能应用程序。我们兼容滚动行为、排版、图标等方面的差异。
 
-#### 跨平台自绘引擎
+#### 跨平台自绘引擎（与RN，Weex的区别）
+
+RN、Weex核心是通过JavaScript开发，执行时需要JavaScript解释器，UI是通过原生控件渲染。Flutter与用于构建移动应用程序的其他大多数框架不同，因为Flutter既不使用WebView，也不使用操作系统的原生控件。相反，Flutter使用自己的高性能渲染引擎来绘制widget。Flutter使用C、C++、Dart和Skia（2D渲染引擎）构建。
 
 #### 高性能
+
+1. Flutter App采用Dart语言开发，Dart在JIT（Just-in-time 即时编译）模式下，速度与JavaScript基本持平；而且Dart还支持AOT（Ahead-of-time 提前编译）模式，当以AOT模式运行时，JavaScript便远远追不上。
+2. Flutter使用自己的渲染引擎来绘制UI，布局数据等由Dart语言直接控制，所以在布局过程中不需要像RN那样通过JavaScriptCore在JavaScript和原生之间进行通信，这在一些滑动和拖动的场景下具有明显优势。
 
 ### Flutter的生命周期
 
@@ -252,7 +257,40 @@ void paint(PaintingContext context, Offset offset) { }
 
   - `settings`包含路由的配置信息，如路由名称，是否是初始路由（首页）
   - `fullscreenDialog`表示新的路由页面是否是一个全屏的模态对话框，默认为false
-  - `maintainState`：默认情况下，当入栈一个新路由时
+  - `maintainState`：默认情况下，当入栈一个新路由时，原来的路由仍然会被保存在内存中，如果想在路由没用的时候释放其所占用的所有资源，可以设置`maintainState`为false
+  - `builder`是一个`WidgetBuilder`类型的回调函数，它的作用是构建路由页面的具体内容，返回值是一个widget。
+
+#### 命名路由
+
+1. 注册路由表：新建routes.dart文件
+2. 配置main.dart
+3. 配置路由传参
+4. 配置路由守卫：`NavigatorObserver `
+5. 路由生成钩子
+
+#### RouteAware
+
+>A [Navigator] observer that notifies [RouteAware]s of changes to the state of their [Route]
+
+```dart
+abstract class RouteAware {
+  /// Called when the top route has been popped off, and the current route
+  /// shows up.
+  void didPopNext() { }
+
+  /// Called when the current route has been pushed.
+  void didPush() { }
+
+  /// Called when the current route has been popped off.
+  void didPop() { }
+
+  /// Called when a new route has been pushed, and the current route is no
+  /// longer visible.
+  void didPushNext() { }
+}
+```
+
+
 
 ### Flutter页面数据刷新(Provider mvvm)
 
@@ -355,7 +393,19 @@ class Selector<A, S> extends Selector0<S>{
 
 
 
-### 插件设计
+### 插件设计 EventChannel && MethodChannel
+
+#### 平台通道
+
+平台通道是Flutter和原生之间通信的桥梁，是Flutter插件的底层基础设施
+
+#### EventChannel && MethodChannel
+
+>MethodChannel用通俗的语言来描述它的作用是，当你想在flutter端调用native功能的时候，可以用它
+>
+>EventChannel用通俗的语言来描述它的作用是，当native想通知flutter层一些消息的时候，可以用它。
+
+
 
 ### dio网络请求封装
 
