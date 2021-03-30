@@ -122,6 +122,10 @@ stopSelf(msg.arg1);
 
 ![handler_消息机制](C:\workspace\somo\document\MyDocument\Picture\笔记\handler_消息机制.jpg)
 
+## Handler中有Looper死循环，为什么没有阻塞主线程，原理是什么
+
+# Android中UI的刷新机制
+
 # HandlerThread 解析
 
 # 事件分发机制

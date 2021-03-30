@@ -34,6 +34,10 @@ title: Android面试——Java高频题
 
    也叫散列表，是根据键码值(key-value)而直接进行访问的数据结构
 
+# Java集合——ArrayList
+
+# Java集合——LinkedList
+
 # Java集合——HashMap
 
 1. 特点：基于Map接口的实现，存储键值对，允许null键值，是非同步的，不保证有序，也不保证时序不随时间变化，HashMap存储着Entry(hash、key、value、next)对象
