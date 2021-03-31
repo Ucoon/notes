@@ -36,25 +36,93 @@ title: Android面试——Java高频题
 
 # Java集合——ArrayList
 
+1. **以数组实现**。节约空间，但数组有容量限制。超出限制时会增加50%容量，用System.arraycopy()复制到新的数组，因此最好能给出数组大小的预估值。默认第一次插入元素时创建大小为10的数组。（`private static final int DEFAULT_CAPACITY = 10;`）
+2. 按数组下标访问元素——**get(i)/set(i, e)的性能很高，这是数组的基本优势**。
+3. 直接在数组末尾加入元素——add(e)的性能也高，但如果**按下标插入、删除元素——add(i, e)，remove(i)，remove(e)，则要用System.arraycopy()来移动部分受影响的元素，性能就变差了，这是基本劣势**。
+
+ArrayList是一个相对来说比较简单的数据结构，最重要的一点就是它的自动扩容，可以认为就是我们常说的**“动态数组”**。
+
+## add函数
+
+```java
+/**
+* Appends the specified element to the end of this list.
+*
+* @param e element to be appended to this list
+* @return <tt>true</tt> (as specified by {@link Collection#add})
+*/
+public boolean add(E e){
+    ensureCapacityInternal(size+1); // Increments modCount!!
+    elementData[size++] = e;
+    return true;
+}
+```
+
+`ensureCapacityInternal()`是自动扩容机制的核心。
+
+```java
+private void ensureCapacityInternal(int minCapacity) {
+    if (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) {
+        minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity);
+    }
+    ensureExplicitCapacity(minCapacity);
+}
+private void ensureExplicitCapacity(int minCapacity) {
+    modCount++;
+    // overflow-conscious code
+    if (minCapacity - elementData.length > 0)
+        grow(minCapacity);
+}
+private void grow(int minCapacity) {
+    // overflow-conscious code
+    int oldCapacity = elementData.length;
+    // 扩展为原来的1.5倍
+    int newCapacity = oldCapacity + (oldCapacity >> 1);
+    // 如果扩为1.5倍还不满足需求，直接扩为需求值
+    if (newCapacity - minCapacity < 0)
+        newCapacity = minCapacity;
+    if (newCapacity - MAX_ARRAY_SIZE > 0)
+        newCapacity = hugeCapacity(minCapacity);
+    // minCapacity is usually close to size, so this is a win:
+    elementData = Arrays.copyOf(elementData, newCapacity);
+}
+```
+
 # Java集合——LinkedList
+
+1. **以双向链表实现**。链表无容量限制，但双向链表本身使用了更多空间，需要额外的链表指针操作
+2. 按下标访问元素——get(i)/set(i, e)，**要遍历链表将指针移动到位**
+3. **插入、删除元素时修改前后节点的指针即可**，但还是要遍历部分链表的指针才能移动到下标所指的位置，只有在链表两头的操作——add()，addFirst()，removeLast()或者用iterator()上的remove()能省掉指针的移动。
+
+# ArrayList和LinkedList的区别
+
+1. ArrayList是基于动态数组的数据结构，Linked基于链表的数据结构
+2. 对于随机访问get和set，ArrayList优于LinkedList，因为LinkedList要移动指针
+3. 对于新增和删除操作，LinkedList比较占优势，因为ArrayList要移动数据
+
+**应用场景**
+
+ArrayLis使用在查询比较多，但是插入和删除比较少的情况；而LinkedList用在查询比较少而插入删除比较多的情况
 
 # Java集合——HashMap
 
 1. 特点：基于Map接口的实现，存储键值对，允许null键值，是非同步的，不保证有序，也不保证时序不随时间变化，HashMap存储着Entry(hash、key、value、next)对象
 
-2. 实现原理：
-
-   ```java
-   1.HashMap底层是由数组加链表结构实现的。数组用来存放元素位置，链表用来解决hash冲突。当往HashMap中添加对象时，先计算key的hashCode，然后根据hashCode计算出元素应该放到数组的哪个位置。找到相应的位置，判断该位置是否已经存在键值对，如果已存在，那么覆盖掉原来的value，如果不存在，就放到该位置。链表的存在就是为了解决不同key出现hash冲突的问题，一般元素会放在链表头，这样做减少操作。
-   2.两个重要参数：容量(capacity)和负载因子(load factor)
+2. 两个重要参数：容量(`Capacity`)和负载因子(`load factor`)
      //初始容量，即最开始线性表的大小为16
      DEFAULT_INITIAL_CAPACITY = 1<<4
      //初始的负载因子
      DEFAULT_LOAD_FACTOR = 0.75
+
+3. 实现原理：
+
+   ```java
+   1.HashMap底层是由数组加链表结构实现的。数组用来存放元素位置，链表用来解决hash冲突。当往HashMap中添加对象时，先计算key的hashCode，然后根据hashCode计算出元素应该放到数组的哪个位置。找到相应的位置，判断该位置是否已经存在键值对，如果已存在，那么覆盖掉原来的value，如果不存在，就放到该位置。链表的存在就是为了解决不同key出现hash冲突的问题，一般元素会放在链表头，这样做减少操作。
+   
      当线性表中的元素（这里指的是HashMap中元素的总个数）>初始容量*负载因子时，线性表会进行扩容操作，将数组长度变为原来的2倍，然后将元素重新计算hashCode放到相应位置（为什么要重新计算hashCode？：虽然key的hashCode不变，但是数组长度变了，在根据hashCode计算数组位置时，得出的索引值肯定是不同的，如果平移过来，会直接导致扩容前添加到HashMap中的数据无法被get到，因为在数组中索引变了）。
    ```
 
-3. 非同步导致线程不安全：在多线程操作情况下什么时候线程不安全？
+4. 非同步导致线程不安全：在多线程操作情况下什么时候线程不安全？
 
    ```java
    1.如果在多个线程，在某一时刻同时操作HashMap并执行put操作。可能会有大于两个key的hash值相同，这个时候需要解决碰撞冲突
@@ -63,13 +131,13 @@ title: Android面试——Java高频题
    解决：使用Collections.synchronizedMap(new HashMap(...))
    ```
 
-4. ```TreeMap```和```LinkedHashMap```
+5. ```TreeMap```和```LinkedHashMap```
 
    ```TreeMap```实现了```SortedMap```接口，对插入的记录根据key排序，默认按照升序排序
 
    ```LinkedHashMap```是Hash表和链表的实现，并且依靠双向链表保证了迭代顺序是插入的顺序
 
-5. ```ConcurrentHashMap```和```HashTable```
+6. ```ConcurrentHashMap```和```HashTable```
 
    1.```HashTable```是线程安全的，它使用```synchronized```来做线程安全，全局只有一把锁
 
