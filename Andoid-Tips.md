@@ -18,7 +18,7 @@
    B onPause --> A onRestart --> onStart --> onResume --> B onStop --> B onDestroy
    ```
 
-   ActivityB是个窗口Activity的情况下，2、3的结论就不一样了：ActivityA跳转到ActivityB时，ActivityA失去焦点部分可见，故不会调用onStop
+   ActivityB是个**窗口Activity**的情况下，2、3的结论就不一样了：ActivityA跳转到ActivityB时，ActivityA失去焦点部分可见，故不会调用onStop
 
    ```java
    A-->B: A onPause-->B onCreate --> B onStart --> B onResume
@@ -149,9 +149,9 @@ stopSelf(msg.arg1);
    5.调用ViewGroup的onInterceptTouchEvent()，如果ViewGroup的onInterceptTouchEvent()返回true，则表示它要拦截当前事件，事件就由ViewGroup自己处理，调用自身的onTouchEvent()；如果返回false，表示它不拦截当前事件，这时事件会传递到子元素，子元素的dispatchTouchEvent()会被调用，如此反复
    ```
 
-![事件分发业务流程图](C:\AndroidProject\MyBlogImg\事件分发业务流程图.jpg)
+![事件分发业务流程图](http://ucoon.gitee.io/myblogimg/事件分发业务流程图.jpg)
 
-![Android事件分发方法](C:\AndroidProject\MyBlogImg\Android事件分发方法.png)
+![Android事件分发方法](http://ucoon.gitee.io/myblogimg/Android事件分发方法.png)
 
 思考：Android自定义View长按事件的实现
 
