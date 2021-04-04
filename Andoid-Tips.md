@@ -124,6 +124,8 @@ stopSelf(msg.arg1);
 
 ## Handler中有Looper死循环，为什么没有阻塞主线程，原理是什么
 
+>主线程Looper从消息队列读取消息，当读完所有消息时，主线程阻塞。子线程往消息队列发送消息，并且往管道文件写数据，主线程即被唤醒，从管道文件读取数据，主线程被唤醒只是为了读取消息，当消息读取完毕，再次睡眠。因此loop的循环并不会对CPU性能有过多的消耗。
+
 # Android中UI的刷新机制
 
 # HandlerThread 解析
@@ -415,6 +417,8 @@ performTraversals会依次调用performMeasure、performLayout和performDraw这�
      ③ListView/RecycleView的滑动时停止加载和分页加载
 
 4. 线程优化：尽量采用线程池
+
+# RxJava
 
 # EventBus 原理：
 
