@@ -47,7 +47,7 @@
 
 # Service 解析
 
-![service生命周期](C:\workspace\somo\document\MyDocument\Picture\笔记\service生命周期.png)
+![service生命周期](http://ucoon.gitee.io/myblogimg/service生命周期.png)
 
 # bindService 与 startService 区别
 
@@ -97,7 +97,7 @@ stopSelf(msg.arg1);
     	对于动态广播，有注册就必然有注销，否则会导致内存泄露
 ```
 
-![广播区别](C:\AndroidProject\MyBlogImg\广播区别.png)
+![广播区别](http://ucoon.gitee.io/myblogimg/广播区别.png)
 
 广播类型：
 
@@ -120,7 +120,7 @@ stopSelf(msg.arg1);
 主要指Handler的运行机制，Handler的运行又与Message、MessageQueue、Looper紧密相关。简单的来说，当Handler发送消息时，将会调用MessageQueue.enqueueMessage，向消息队列（实质上是单链表）中添加消息，当通过Looper.loop开启循环后，会不断地从线程池中读取消息，即调用MessageQueue.next，然后调用目标Handler（即发送该消息的Handler）的dispatchMessage方法传递消息，然后返回到Handler所在线程，目标Handler收到消息，调用handleMessage方法，接收消息，处理消息。
 ```
 
-![handler_消息机制](C:\workspace\somo\document\MyDocument\Picture\笔记\handler_消息机制.jpg)
+![handler_消息机制](http://ucoon.gitee.io/myblogimg/handler_消息机制.jpg)
 
 ## Handler中有Looper死循环，为什么没有阻塞主线程，原理是什么
 
@@ -163,7 +163,7 @@ stopSelf(msg.arg1);
 主要指measure、layout和draw过程，View的绘制流程是从ViewRoot的performTraversals，它经过measure、layout和draw三个过程才能最终将一个view绘制出来，针对performTraversals的大致流程，如下图所示：
 ```
 
-![performTraversals的工作流程](C:\workspace\somo\document\MyDocument\Picture\笔记\performTraversals的工作流程.png)
+![performTraversals的工作流程](http://ucoon.gitee.io/myblogimg/performTraversals的工作流程.png)
 
 ```java
 performTraversals会依次调用performMeasure、performLayout和performDraw这三个方法，这三个方法分别完成顶级View的measure、layout和draw这三大流程，其中performMeasure会调用measure方法（measure方法是一个final类型的方法），在measure方法中又会调用onMeasure方法，在onMeasure方法中则会对所有的子元素进行measure过程，这个时候measure流程就从父容器传递到子元素中了，完成了一次measure过程。接着子元素会重复父容器的measure过程，如此反复就完成了整个view树的遍历。同理，performLayout和performDraw的传递流程和performMeasure是类似的
@@ -211,7 +211,7 @@ performTraversals会依次调用performMeasure、performLayout和performDraw这�
  	server: new ServerSocket(8081);->调用serverSocket.accept()->通过输出流（socket.getOutputStream）发送数据->通过输入流接收数据（socket.getInputStream）
 ```
 
-![Binder工作机制](C:\AndroidProject\MyBlogImg\Binder工作机制.jpg)
+![Binder工作机制](http://ucoon.gitee.io/myblogimg/Binder工作机制.jpg)
 
 # Activity启动模式(launchMode)
 
@@ -420,28 +420,26 @@ performTraversals会依次调用performMeasure、performLayout和performDraw这�
 
 # RxJava
 
-# EventBus 原理：
+# EventBus 原理
 
-    1. ThreadMode，四种模式：PostThread、MainThread、BackgroundThread以及Async
-    
-       ```java
-    PostThread：事件的处理和事件的发送在相同的进程
-       MainThrad：事件的处理在UI线程中执行
-       BackgroundThread：如果事件是在UI线程中发布出来，那事件处理就会在子线程中运行，如果事件在子线程中发布出来，那么事件处理直接在子线程中执行
-       Async：事件处理在单独的线程中执行，主要用于在后台线程中执行耗时操作
-       ```
-       
-    2. 源码解析
-    
-       ```java
-    register: 根据订阅者类名查找当前订阅者的所有事件响应函数-->循环每个事件响应函数-->得到该事件类型的所有订阅者信息，根据优先级将当前订阅者插入订阅者队列-->得到当前订阅者订阅的所有事件队列，将此事件保存到队列中-->判断是否是粘性事件--Yes-->取出粘性事件，post此事件给当前订阅者
-       
-       post：从currentPostingThreadState得到当前线程的Post信息PostingThreadState，其中包括事件队列-->将当前事件添加到当前线程的事件队列中-->判断事件是否分发中-->循环事件队列中的每个事件-->查找该事件的所有订阅者，循环每个订阅者-->根据ThreadMode，在不同的线程调用订阅者的事件响应函数
-       ```
+1. ThreadMode，四种模式：PostThread、MainThread、BackgroundThread以及Async
+   - PostThread：事件的处理和事件的发送在相同的进程 
+   - MainThrad：事件的处理在UI线程中执行
+   - BackgroundThread：如果事件是在UI线程中发布出来，那事件处理就会在子线程中运行，如果事件在子线程中发布出来，那么事件处理直接在子线程中执行
+   - Async：事件处理在单独的线程中执行，主要用于在后台线程中执行耗时操作
+2. 源码解析
+   - register: 根据订阅者类名查找当前订阅者的所有事件响应函数-->循环每个事件响应函数-->得到该事件类型的所有订阅者信息，根据优先级将当前订阅者插入订阅者队列-->得到当前订阅者订阅的所有事件队列，将此事件保存到队列中-->判断是否是粘性事件--Yes-->取出粘性事件，post此事件给当前订阅者
+   - post：从currentPostingThreadState得到当前线程的Post信息PostingThreadState，其中包括事件队列-->将当前事件添加到当前线程的事件队列中-->判断事件是否分发中-->循环事件队列中的每个事件-->查找该事件的所有订阅者，循环每个订阅者-->根据ThreadMode，在不同的线程调用订阅者的事件响应函数
 
-   ![EventBus-register](C:\AndroidProject\MyBlogImg\EventBus-register.png)
+   ![EventBus-register](http://ucoon.gitee.io/myblogimg/EventBus-register.png)
 
-   ![EventBus-post](C:\AndroidProject\MyBlogImg\EventBus-post.png)
+   ![EventBus-post](http://ucoon.gitee.io/myblogimg/EventBus-post.png)
+
+3. 优缺点
+
+   - 优点：简化组件之间的通信方式，实现解耦让业务代码更加简洁，可以动态设置事件处理线程和优先级
+
+   - 缺点：每个事件都必须自定义一个事件类，造成事件类太多，增加维护成本
 
    # 屏幕适配方案：
 
@@ -513,7 +511,7 @@ Android 8.0:
 
 >蓝牙是一种短距离的无线通信技术，可以实现固定设备、移动设备之间的数据交换。一般将蓝牙分为两大类，蓝牙3.0规范之前的版本称为传统蓝牙，蓝牙4.0规范之后的版本称为低功耗蓝牙，也就是常说的BLE（Bluetooth Low Energy）。
 
-![蓝牙开发流程](C:\AndroidProject\MyBlogImg\蓝牙开发流程.jpg)
+![蓝牙开发流程](http://ucoon.gitee.io/myblogimg/蓝牙开发流程.jpg)
 
 - **1.BluetoothAdapter**
 
@@ -570,5 +568,3 @@ Android 8.0:
    ```java
    1. addJavascriptInterface
    ```
-
-   
