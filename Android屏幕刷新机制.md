@@ -76,7 +76,7 @@ CPU/GPU根据VSync信号同步处理数据，可以让CPU/GPU有完整的16ms时
 
 ## 双缓存机制总结
 
-当VSync出现时，CPU/GPU开始处理数据并写入到Back Buffer，并与显示屏进行缓存交换，显示屏取得是Frame Buffer的数据；当下一个VSync出现时，CPU/GPU重复上述操作，如此循环反复。
+**当VSync出现时，CPU/GPU开始处理数据并写入到Back Buffer，并与显示屏进行缓存交换，显示屏取得是Frame Buffer的数据；当下一个VSync出现时，CPU/GPU重复上述操作，如此循环反复。**
 
 ## 三缓存
 

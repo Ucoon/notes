@@ -124,7 +124,48 @@ stopSelf(msg.arg1);
 
 ## Handler中有Looper死循环，为什么没有阻塞主线程，原理是什么
 
->主线程Looper从消息队列读取消息，当读完所有消息时，主线程阻塞。子线程往消息队列发送消息，并且往管道文件写数据，主线程即被唤醒，从管道文件读取数据，主线程被唤醒只是为了读取消息，当消息读取完毕，再次睡眠。因此loop的循环并不会对CPU性能有过多的消耗。
+*应该从 主线程的消息循环机制 与Linux的循环异步等待作用讲起。最后将handler引起的内存泄漏，内存泄漏一定是一个加分项*
+
+1. 为什么没有导致应用卡死
+
+   **前提：**ActivityThread.java是主线程入口的类
+
+   ```java
+   public static final void main(String[] args) {
+       ...
+       //创建Looper和MessageQueue
+       Looper.prepareMainLooper();
+       ...
+       //轮询器开始轮询
+       Looper.loop();
+       ...
+   }
+   ```
+
+   Looper.loop()方法：
+
+   ```java
+   while (true) {
+       //取出消息队列的消息，可能会阻塞
+       Message msg = queue.next(); // might block
+       ...
+       //解析消息，分发消息
+       msg.target.dispatchMessage(msg);
+      	...
+   }
+   ```
+
+   显而易见的，如果main方法没有looper进行循环，那么主线程一运行完毕就会退出。
+
+   **总结：ActivityThread的main方法主要就是做消息循环，一旦退出消息循环，那么应用就会退出**
+
+   **真正的原因：**因为Android的应用是由事件驱动的，`looper.loop()`不断地接收事件、处理事件，每一个点击触摸或者说Activity的生命周期都是运行在Looper.loop()的控制之下，如果它停止了，应用也就停止了。**也就是说我们的代码其实就是在这个循环去执行的，当然不会阻塞**。
+
+   **真正会卡死主线程的操作**是在回调方法`onCreate/onStart/onResume`等操作时间过长，会导致掉帧，甚至发生ANR，`looper.loop`本身不会导致应用卡死。
+
+2. 主线程的死循环一直运行是不是特别消耗CPU资源？原理是什么
+
+   `Linux pipe/epoll`机制：简单说就是在主线程的`MessageQueue`没有消息时，便阻塞在loop的`queue.next()`中的`nativePollOnce()`方法里，此时主线程会释放CPU资源进入休眠状态，直到下个消息到达或者有事务发生，通过往pipe管道写端写入数据来唤醒主线程工作。
 
 # Android中UI的刷新机制
 
@@ -452,7 +493,7 @@ performTraversals会依次调用performMeasure、performLayout和performDraw这�
    ```
 
     1. dp直接适配（最原始的Android适配方案）
-    
+   
     2. 宽高限定符适配
        
     3. AndroidAutoLayout——鸿洋
