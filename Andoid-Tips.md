@@ -198,6 +198,36 @@ stopSelf(msg.arg1);
 
 思考：Android自定义View长按事件的实现
 
+```java
+public boolean dispatchTouchEvent(MotionEvent event) {
+		int x = (int) event.getX();
+		int y = (int) event.getY();
+		
+		switch(event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			mLastMotionX = x;
+			mLastMotionY = y;
+			isMoved = false;
+			postDelayed(mLongPressRunnable, ViewConfiguration.getLongPressTimeout());
+			break;
+		case MotionEvent.ACTION_MOVE:
+			if(isMoved) break;
+			if(Math.abs(mLastMotionX-x) > TOUCH_SLOP 
+					|| Math.abs(mLastMotionY-y) > TOUCH_SLOP) {
+				//移动超过阈值，则表示移动了
+				isMoved = true;
+				removeCallbacks(mLongPressRunnable);
+			}
+			break;
+		case MotionEvent.ACTION_UP:
+			//释放了
+			removeCallbacks(mLongPressRunnable);
+			break;
+		}
+		return true;
+	}
+```
+
 # View的工作过程：
 
 ```java
@@ -460,6 +490,19 @@ performTraversals会依次调用performMeasure、performLayout和performDraw这�
 4. 线程优化：尽量采用线程池
 
 # RxJava
+
+- Observable：被订阅者，被订阅者是事件的来源，接收订阅者`(Observer)`的订阅，然后通过发射器`(Emitter)`发射数据给订阅者。
+- Observer：订阅者，注册过程传给被订阅者，订阅者监听开始订阅，监听订阅过程中会把`Disposable`传给订阅者，然后在被订阅者中的发射器`(Emitter)`发射数据给订阅者`(Observer)`。
+- Emitter：发射器，在发射器中会接收下游的订阅者`(Observer)`，然后在发射器相应的方法把数据传给订阅者`(Observer)`。
+- Consumer：消费器
+- Disposable：释放器
+
+操作符：
+
+1. empty：创建一个什么都不做直接通知完成的Observable
+2. error：创建一个什么都不做直接通知错误的Observable
+3. timer：创建一个在给定的延时之后发射数据项为0的Observable
+4. interval：创建一个按照给定的时间间隔发射为0开始的整数序列的Observable
 
 # EventBus 原理
 
