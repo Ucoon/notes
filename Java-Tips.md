@@ -143,6 +143,10 @@ ArrayLis使用在查询比较多，但是插入和删除比较少的情况；而
 
    2.```ConcurrentHashMap```引入了分段锁的技术，即把一个大的Map拆分成N个小的```HashTable```
 
+# Java equals和hashcode
+
+
+
 # TCP 与 UDP区别
 
 1. TCP（Transmission Control Protocol，传输控制协议）是基于连接的协议，也就是说，在正式收发数据前，必须和对方建立可靠的连接。（三次握手）
