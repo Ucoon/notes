@@ -75,4 +75,21 @@ ViewModel层做的事情刚好和View层相反，ViewModel 只做和业务逻辑
    >来源：掘金
    >著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
    
+   **执行流程**：
+   
+   ```java
+   //第一步：实例化LiveData
+   val liveData = MutableLiveData<ClipData.Item>()
+   //第二步：注册observer
+   liveData.observe(this, Observer<ClipData.Item> {
+   //执行回调
+   })
+   //第三步：传值
+   liveData.postValue(ClipData.Item("postValue"))
+   //或者
+   //liveData.setValue(ClipData.Item("postValue"))
+   ```
+   
+   
+   
    
