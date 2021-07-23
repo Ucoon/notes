@@ -8,7 +8,9 @@
 
 RN、Weex核心是通过JavaScript开发，执行时需要JavaScript解释器，UI是通过原生控件渲染。Flutter与用于构建移动应用程序的其他大多数框架不同，因为Flutter既不使用WebView，也不使用操作系统的原生控件。相反，Flutter使用自己的高性能渲染引擎来绘制widget。Flutter使用C、C++、Dart和Skia（2D渲染引擎）构建。
 
-#### 高性能
+>目前，**Skia已然是Android官方的图像渲染引擎**了，因此**Flutter Android SDK无需内嵌Skia引擎**就可以获得天然的Skia支持；而对于iOS平台来说，由于Skia是跨平台的，因此**它作为Flutter 的iOS渲染引擎被嵌入到了Flutter iOS SDK中，代替了iOS闭源的Core Graphics/Core Animation/Core Text**，这也正是Flutter iOS SDK打包的APP包体积比Android要大一些的原因。
+
+#### 高性能(为什么是Dart？)
 
 1. Flutter App采用Dart语言开发，Dart在JIT（Just-in-time 即时编译）模式下，速度与JavaScript基本持平；而且Dart还支持AOT（Ahead-of-time 提前编译）模式，当以AOT模式运行时，JavaScript便远远追不上。
 2. Flutter使用自己的渲染引擎来绘制UI，布局数据等由Dart语言直接控制，所以在布局过程中不需要像RN那样通过JavaScriptCore在JavaScript和原生之间进行通信，这在一些滑动和拖动的场景下具有明显优势。
@@ -60,7 +62,7 @@ RN、Weex核心是通过JavaScript开发，执行时需要JavaScript解释器，
       **dispose()**：当State对象从树中被永久移除时调用；通常在此回调中释放资源。
    
    ```dart
-为什么要将build方法放在State中，而不是放在StatefulWidget中？
+   为什么要将build方法放在State中，而不是放在StatefulWidget中？
    1. 状态访问不便。
    2. 继承StatefulWidget不便
    ```

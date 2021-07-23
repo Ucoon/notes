@@ -1,4 +1,4 @@
-![Flutter知识体系](https://static001.geekbang.org/resource/image/99/64/9959006fe52706a123cc7fc596346064.jpg)
+![Flutter知识体系](https://static001.geekbang.org/resource/image/99/64/9959006fe52706a123cc7fc596346064.jpg) ly0316924
 
 ### Flutter是怎么完成组件渲染
 
@@ -61,3 +61,59 @@ Flutter的渲染树层级通常很多，直接交付给渲染引擎进行多图�
 ### Widget，构建Flutter界面的基石
 
 `Widget`的功能是“描述一个UI元素的配置数据”，所以即使销毁重建也不影响真实的渲染树，Flutter会计算diff判断真正需要刷新的部分
+
+Flutter将视图树的概念进行了扩展，把视图数据的组织和渲染抽象为三部分，即Widget、Element和RenderObject，其关系如下图所示：
+
+![Widget、Element与RenderObject](https://static001.geekbang.org/resource/image/b4/c9/b4ae98fe5b4c9a7a784c916fd140bbc9.png)
+
+#### Widget
+
+- Flutter将Widget设计成不可变的，所以当视图渲染的配置信息发生变化时，Flutter会选择重建Widget树的方式进行数据更新，以数据驱动UI构建的方式简单高效。
+- Widget本身并不涉及实际渲染位图，所以它只是一份轻量级的数据结构，重建的成本很低。
+- 由于Widget的不可变性，可以以较低成本进行渲染节点复用，因此在一个真实的渲染树中可能存在不同的Widget对应同一个渲染节点的情况，这无疑又降低了重建UI的成本。
+
+#### Element
+
+Element是Widget的一个实例化对象，它承载了试图构建的上下文数据，是连接结构化的配置信息（Widget）到最终渲染（RenderObject）的桥梁。
+
+Flutter渲染过程：
+
+- 通过Widget树生成对应的Element树
+- 创建相应的RenderObejct并关联到Element.renderObject属性上
+- 最后，构建RenderObject树，完成最终的渲染。
+
+### Dart语法
+
+#### 常量定义
+
+- const适用于定义编译常量（字面量固定值）的场景
+- final适用于定义运行时常量的场景
+
+#### 函数
+
+1. Dart所有类型都是对象类型，函数也是对象
+
+2. Dart不支持重载，而是提供了可选命名参数和可选参数(可忽略参数)
+
+   - 可选命名参数：给参数增加{}，以`paramName`:  `value`的方式指定调用参数
+
+     ```dart
+     void enable1Flags({bool bold, bool hidden}) => print("$bold, $hidden");
+     ```
+
+   - 可选(可忽略)参数：给参数增加[]，则意味着这些参数是可以忽略的
+
+     ```dart
+     void enable2Flags(bool bold, [bool hidden]) => print("$bold, $hidden");
+     ```
+
+3. 类的复用：继承父类、接口实现和“混入”（`Mixin`，关键字with）
+
+4. 运算符
+
+   - ?.
+   - ??=：如果a为null，则给a赋值value
+   - ??
+
+   
+

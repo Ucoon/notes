@@ -78,6 +78,8 @@ title: Git命令速记
 - Git - .gitignore怎么忽略已经被版本控制的文件
 
   使用命令`git rm --cached filename`，然后将该文件写入`.gitignore`中即可。
+  
+- `git cherry-pick commitId` 合并特定commit到当前分支
 
 **常见错误**
 
