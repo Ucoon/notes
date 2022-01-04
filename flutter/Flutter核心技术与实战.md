@@ -82,6 +82,25 @@ Flutter渲染过程：
 - 创建相应的RenderObejct并关联到Element.renderObject属性上
 - 最后，构建RenderObject树，完成最终的渲染。
 
+### Widget中的State
+
+- `StatefulWidget`应对有交互、需要动态变化视觉效果的场景
+
+- `Statelesswidget`用于处理静态的、无状态的视图展示
+
+  当你所要构建的用户界面不随任何状态信息变化而变化时，需要选择`StatelessWidget`，反之则选用`StatefulWidget`
+
+>Widget是不可变的，更新则意味着销毁+重建。StatelessWidget是静态的，一旦创建则无需更新，而对于StatefulWidget来说，在State类中调用setState方法更新数据，会触发视图的销毁和重建，也将间接地触发其每个子Widget的销毁和重建
+
+#### UI 编程范式
+
+- 命令式(原生系统开发)：精确地告诉操作系统用何种方式去做事情
+- 声明式：视图和数据分离
+
+#### State生命周期
+
+
+
 ### Dart语法
 
 #### 常量定义

@@ -281,6 +281,26 @@ https://juejin.im/post/6844903823119482888#heading-0
 >
 >EventChannell用通俗的语言来描述就是，当native想通知flutter层一些消息的时候，可以用它
 
+## iOS真机调试和运行
+
+1. 在新的mac上搭建Flutter环境（所需软件：Android Studio、Xcode）
+
+2. 安装ruby cocoapods（注意切换源）
+
+3. cd project/ios -->pod install 
+
+4. 在app开发者平台上创建id-->钥匙链创建私钥-->申请证书-->证书导入到mac-->创建profile-->在xcode导入profile-->修改build settings
+
+5. 阿里云推送
+
+6. 微信登录：
+
+   ​	https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/iOS.html
+
+   ​	https://www.jianshu.com/p/06108091db86
+
+   
+
 # 遇到的问题
 
 1. flutter running gradle task 'assembledebug' 卡住：
@@ -324,6 +344,19 @@ https://juejin.im/post/6844903823119482888#heading-0
 5. Flutter 设备连接一直显示loading...
 
    连接网络！连接网络！连接网络！
+   
+6. ```dart
+   A failure occurred while executing com.android.build.gradle.internal.tasks.Workers$ActionFacade
+   File 'com.android.builder.files.ZipCentralDirectory@69765e30' was deleted, but previous version not found in cache
+   ```
+
+   >flutter channel stable 
+   >
+   >flutter upgrade --force 
+   >
+   >flutter pub cache repair 
+   >
+   >cd <YOUR APP FOLDER> flutter clean
 
 # 常用flutter命令
 
