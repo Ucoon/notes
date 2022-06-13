@@ -12,7 +12,7 @@ title: Flutter Plugin开发与发布
 
   可选择使用的语言和插件支持的平台
 
-  ![选择语言](http://ucoon.gitee.io/myblogimg/Flutter_Plugin_1.png)
+  ![选择语言](http://ucoon.tech/MyBlogImg/Flutter_Plugin_1.png)
 
 - 方式二：通过命令行创建Flutter Plugin Project（使用`--template=plugin`）
 

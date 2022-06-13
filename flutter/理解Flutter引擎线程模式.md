@@ -4,7 +4,7 @@ title: 理解Flutter引擎线程模式
 
 # Flutter体系结构
 
-![flutter_system_overview](http://ucoon.gitee.io/myblogimg/flutter_system_overview.png)
+![flutter_system_overview](http://ucoon.tech/MyBlogImg/flutter_system_overview.png)
 
 ## Framework
 

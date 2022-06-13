@@ -12,7 +12,7 @@ Skia是一款用C++开发的、性能彪悍的2D图像绘制引擎。
 
 ### Flutter三层架构：`Framework`、`Engine`、`Embedder`
 
-![flutter_system_overview](http://ucoon.gitee.io/myblogimg/flutter_system_overview.png)
+![flutter_system_overview](http://ucoon.tech/MyBlogImg/flutter_system_overview.png)
 
 1. Framework
 

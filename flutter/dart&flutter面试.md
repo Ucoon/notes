@@ -37,7 +37,7 @@ RN、Weex核心是通过JavaScript开发，执行时需要JavaScript解释器，
            2. 一个`State`类：`StatefulWidget`类本身是不变的，但是`State`类中持有的状态在`widget`生命周期中可能会发生变化
       2. 无状态组件`StatelessWidget`：没有要管理的内部状态。它通过构建一系列其他小部件来更加具体地描述用户界面，从而描述用户界面的一部分。当我们的页面不依赖`Widget`对象本身中的配置信息以及BuildContext时，就可以用到无状态组件。
    
-      ![flutter-statefulwidget生命周期.png](http://ucoon.gitee.io/myblogimg/flutter-statefulwidget%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg)
+      ![flutter-statefulwidget生命周期.png](http://ucoon.tech/MyBlogImg/flutter-statefulwidget%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg)
 
       **createState()**：createState是`StatefulWidget`里创建State的方法，当要创建新的`StatefulWidget`的时候，会立即执行createState，而且只执行一次；但是它在`StatefulWidget`的生命周期中可能会被多次调用。例如，当一个`StatefulWidget`同时插入到widget树的多个位置时，Flutter framework就会调用该方法为每一个位置生成一个独立的State实例
 
@@ -95,7 +95,7 @@ RN、Weex核心是通过JavaScript开发，执行时需要JavaScript解释器，
 
 ### Flutter三层架构：`Framework`、`Engine`、`Embedder`
 
-![flutter_system_overview](http://ucoon.gitee.io/myblogimg/flutter_system_overview.png)
+![flutter_system_overview](http://ucoon.tech/MyBlogImg/flutter_system_overview.png)
 
 1. Framework
 
@@ -176,7 +176,7 @@ Element的生命周期如下：
 5. “inactive”态的element将不会再显示到屏幕。为了避免在一次动画执行过程中反复创建、移除某个特定element，“inactive”态的element在当前动画最后一帧结束前都会保留，如果在动画执行结束后它还未能重新变成“active”状态，Framework就会调用其`unmount`方法将其彻底移除，这时element的状态为`defunct`，它将永远不会再被插入到树中。
 6. 如果`element`要重新插入到Element树的其他位置，如`element`或`element`的父级拥有一个GlobalKey(用于全局复用元素），那么Framework会先将element从现有位置移除，然后再调用其`activate`方法，并将其`renderObject`重新attach到渲染树。
 
-![element_生命周期](http://ucoon.gitee.io/myblogimg/element_%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg)
+![element_生命周期](http://ucoon.tech/MyBlogImg/element_%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg)
 
 #### RenderObject
 

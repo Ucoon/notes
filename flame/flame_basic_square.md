@@ -8,7 +8,7 @@ game loop是一款游戏的本质，即为一组反复运行的代码。
 
 一个基本的game loop由两部分组成，`update`和`render`
 
-![game loop](http://ucoon.gitee.io/myblogimg/game_loop.png)
+![game loop](http://ucoon.tech/MyBlogImg/game_loop.png)
 
 绝大多数的游戏基于这两种函数构建：
 

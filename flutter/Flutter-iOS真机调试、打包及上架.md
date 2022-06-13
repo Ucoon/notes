@@ -71,11 +71,11 @@ export JAVA_HOME PATH CLASSPATH
 
 3. 在mac上通过钥匙串应用创建两个证书请求文件（CSR文件），分别对应Development环境和Distribution环境
 
-   <img src="http://ucoon.gitee.io/myblogimg/csr文件申请_1.png" style="zoom:25%;" />
+   <img src="http://ucoon.tech/MyBlogImg/csr文件申请_1.png" style="zoom:25%;" />
 
    
 
-   <img src="http://ucoon.gitee.io/myblogimg/csr文件申请_2.png" style="zoom:25%;" />
+   <img src="http://ucoon.tech/MyBlogImg/csr文件申请_2.png" style="zoom:25%;" />
 
 4. Create a New Certificate(证书)
 
@@ -83,7 +83,7 @@ export JAVA_HOME PATH CLASSPATH
    
    2. 生成后的证书需要下载并通过钥匙串导入到Mac
    
-      <img src="http://ucoon.gitee.io/myblogimg/证书导入.png" alt="证书导入" style="zoom: 25%;" />
+      <img src="http://ucoon.tech/MyBlogImg/证书导入.png" alt="证书导入" style="zoom: 25%;" />
    
       ```dart
       注意事项：
