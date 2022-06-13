@@ -74,8 +74,8 @@
 											],
 											"font": "Courier New;13;0",
 											"left": 8,
-											"width": 692,
-											"height": 592,
+											"width": 673,
+											"height": 417,
 											"nameLabel": {
 												"$ref": "AAAAAAGBWvNYHvLJwnQ="
 											},
@@ -1486,7 +1486,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGBWvNYHfLF82s="
 							},
-							"name": "Role1"
+							"name": "Role1",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1494,7 +1495,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGBWvNYHfLF82s="
 							},
-							"name": "Role2"
+							"name": "Role2",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1502,7 +1504,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGBWvNYHfLF82s="
 							},
-							"name": "Role3"
+							"name": "Role3",
+							"type": ""
 						},
 						{
 							"_type": "UMLAttribute",
@@ -1510,7 +1513,8 @@
 							"_parent": {
 								"$ref": "AAAAAAGBWvNYHfLF82s="
 							},
-							"name": "Role4"
+							"name": "Role4",
+							"type": ""
 						}
 					]
 				}
