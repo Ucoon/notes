@@ -1,5 +1,5 @@
 ---
-Flutter Platform Channel原理
+title: Flutter Platform Channel原理
 ---
 
 概述：本文不讲述如何编写代码，只学习其原理，如何编写可参考[Flutter-Plugin开发与发布](http://ucoon.tech/2022/01/27/Flutter-Plugin%E5%BC%80%E5%8F%91%E4%B8%8E%E5%8F%91%E5%B8%83/)

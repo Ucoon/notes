@@ -135,7 +135,11 @@ git reset --hard origin/master
    5. then press enter
    ```
 
-   
+4. fatal: refusing to merge unrelated histories：因为两个分支没有取得关系
+
+   解决办法：在操作命令后面加`--allow-unrelated-histories`，例如：
+
+   `git pull origin main --allow-unrelated-histories`
 
 
 
