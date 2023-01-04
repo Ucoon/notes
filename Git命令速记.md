@@ -141,6 +141,19 @@ git reset --hard origin/master
 
    `git pull origin main --allow-unrelated-histories`
 
+5. GitHub使用Personal access token
 
+   * 方式一：直接push
 
-   
+     ```java
+     git push https://你的token@github.com/Ucoon/car_paint_formula.git
+     ```
+
+   * 方式二：修改remote
+
+     ```java
+     git remote set-url origin https://你的token@github.com/Ucoon/car_paint_formula.git
+     git push -u origin master
+     ```
+
+     

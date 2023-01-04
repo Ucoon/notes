@@ -111,6 +111,8 @@ RN、Weex核心是通过JavaScript开发，执行时需要JavaScript解释器，
 
 ### Flutter 三棵树：Widget树、Element树、RenderObject树
 
+>Widgets configure, elements manage, and RenderObjects paint
+
 #### 依赖关系
 
 当应用启动时Flutter会遍历并创建所有的Widget会形成Widget Tree，同时与Widget Tree相对应，通过调用Widget上的`createElement()`创建每个Element对象，形成Element Tree，最后调用Element的`createRenderObject()`创建每个渲染对象，形成一个Render Tree（“渲染树”），总结一下，我们可以认为Flutter的UI系统包含三棵树：Widget树，Element树、渲染树。他们的依赖关系是：Element树根据Widget树生成，而渲染树又依赖于Element树。
@@ -119,7 +121,9 @@ RN、Weex核心是通过JavaScript开发，执行时需要JavaScript解释器，
 
 #### Widget
 
-1. 在Flutter中，`Widget`的功能是“描述一个UI元素的配置数据”；
+>**A widget is an immutable description of part of a user interface**
+
+1. 在Flutter中，`Widget`的功能是“描述一个UI元素的配置数据”
 
    ```dart
    /// Widgets are the central class hierarchy in the Flutter framework. A widget
@@ -165,6 +169,8 @@ abstract class Widget extends DiagnosticableTree {
 
 #### Element
 
+>**Element: an instantitation of a widget at a particular location in the tree**
+
 Element是Widget在UI树具体位置的一个实例化对象，大多数Element只有唯一的`renderObject`，但是还有一些Element会有多个子节点，如继承自`RenderObjectElement`的一些类，比如`MultiChildRenderObjectElement`。
 
 Element的生命周期如下：
@@ -179,6 +185,8 @@ Element的生命周期如下：
 ![element_生命周期](http://ucoon.tech/MyBlogImg/element_%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F.jpg)
 
 #### RenderObject
+
+>**RenderObject: handles size, layout, and painting**
 
 `RenderObject`的主要职责是布局（Layout）和绘制，所有的`RenderObject`会组成一棵渲染树`Render Tree`。`RenderObject`是渲染树中的一个对象，它拥有一个`parent`和一个`parentData`插槽（`slot`），所谓插槽就是指预留的一个接口或位置，这个接口和位置是由其他对象来接入或占据的，这个接口或位置在软件中通常用预留变量来表示，而`parentData`正是一个预留变量，它正是由`parent`来赋值。`parent`通常会通过子`RenderObject`的`parentData`存储一些和子元素相关的数据。
 
