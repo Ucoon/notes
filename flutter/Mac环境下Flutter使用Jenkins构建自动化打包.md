@@ -14,7 +14,8 @@ title: Mac环境下Flutter使用Jenkins构建自动化打包
 
 1. 使用`brew`进行安装：`brew install jenkins`，
 2. 启动jenkins：`brew services start jenkins`
-3. 首次启动需要解锁Jenkins，安装推荐的插件，自定义设置用户名及密码
+3. 在浏览器中输入地址 http://0.0.0.0:8080 ，即可看到 Jenkins 页面
+4. 首次启动需要解锁Jenkins，安装推荐的插件，自定义设置用户名及密码
 
 安装完成Jenkins面板界面如下：
 
@@ -110,7 +111,40 @@ title: Mac环境下Flutter使用Jenkins构建自动化打包
 
 ## iOS
 
+**[通过在打包机器上配置证书和mobile provision等文件的方式来完成打包认证]**
 
+1. 手动配置证书
+
+2. 配置描述文件
+
+3. 开始打包
+
+   新建Project—>填写描述—>配置git—>配置参数化构建过程这几个步骤和Android项目类似，不同的是iOS的构建脚本，如下所示：
+
+   ```shell
+   cd app_common
+   flutter clean
+   flutter pub get
+   cd ../patient
+   flutter clean
+   flutter pub get
+   mv sample.env .env
+   security unlock-keychain -p Yardi5550586
+   flutter build ipa --release --dart-define=ENV=${BUILD_ENV}
+   ExportOptionsPath=$JENKINS_HOME/jobs/$JOB_NAME/ExportOptions.plist
+   ArchivePath=$WORKSPACE/patient/build/ios/archive/Runner.xcarchive
+   PackagePath=$WORKSPACE/patient/build/ios/archive/build
+   xcodebuild -exportArchive -exportOptionsPlist $ExportOptionsPath -archivePath $ArchivePath -exportPath $PackagePath -allowProvisioningUpdates
+   ```
+
+   关键命令解释：
+
+   1. `security unlock-keychain -p xxxxxx`：在开始打包之前，需要先解锁下`keychain`，这里的xxxx就是对应Mac上的密码
+   2. `flutter build ipa --release --dart-define=ENV=${BUILD_ENV}`：指定release模式，开始编译iOS代码，并在 `build/ios/archive` 文件夹下生成一个 Xcode 构建归档（`.xcarchive` 文档）
+   3. 执行完`Archive`之后，就可以进入`export`阶段，`exportArchive`之前需要先准备一个`ExportOptions.plist`文件到指定目录，这个文件可以先在打包机上用Xcode执行一次完整的Export流程，在对应的archive文件夹下存在对应的`ExportOptions.plist`
+   4. 接着通过指定命令`exportArchive`，指定`ExportOptions.plist`，最终输出到`PackagePath`，得到一个ipa文件
+
+   上述命令均为`ad-hoc`模式，如果是指定`app-store`模式，则需准备`app-store`对应的`ExportOptions.plist`文件，最终才能得到一个`app-store`模式的ipa文件
 
 # 插件推荐
 
@@ -119,3 +153,21 @@ title: Mac环境下Flutter使用Jenkins构建自动化打包
 插件：`Locale plugin`，`Localization: Chinese (Simplified)版本`
 
 使用：在Manage Jenkins->Configure System下的Local设置默认语言(Default Language)：`zh_CN`
+
+## 蒲公英上传和二维码显示
+
+插件：`Upload to pgyer`和`description setter plugin`
+
+使用：在构建完成后可以将apk/ipa文件上传至蒲公英，并以二维码形式展示在构建历史处
+
+注意：Jenkins默认是plain text模式，所以不会对蒲公英上传成功后返回的html信息进行解析，所以装完`description setter plugin`后还需在全局安全设置(Config Global Security)中，将标记格式器(Markup Formatter)的设置更改为Safe HTML即可
+
+```html
+<a href="${appBuildURL}"><img src="${appQRCodeURL}" width="118" height="118"/></a>
+```
+
+![jenkins_upload_pgy](http://ucoon.tech/MyBlogImg/jenkins_upload_pgy.png)
+
+参考文章：
+
+[Flutter 搭建 iOS 命令行服务打包发布全保姆式流程](https://www.agora.io/cn/community/blog/21605)
