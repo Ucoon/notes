@@ -14,13 +14,13 @@ title: Flutter Platform Channel原理
 
 # 官方架构图：
 
-![Flutter Platform Channel](https://flutterchina.club/images/PlatformChannels.png)
+![Flutter Platform Channel](https://flutter.cn/docs/assets/images/docs/PlatformChannels.png)
 
 # 流程图
 
 ## MethodChannel调用流程
 
-![MethodChannel调用流程](https://ucoon.gitee.io/myblogimg/MethodChannel%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B.jpg)
+![MethodChannel调用流程](http://ucoon.tech/MyBlogImg/MethodChannel调用流程.jpg)
 
 小结：
 
@@ -30,7 +30,7 @@ title: Flutter Platform Channel原理
 
 ## MethodChannel返回流程
 
-![MethodChannel返回流程](https://ucoon.gitee.io/myblogimg/MethodChannel%E8%BF%94%E5%9B%9E%E6%B5%81%E7%A8%8B.jpg)
+![MethodChannel返回流程](http://ucoon.tech/MyBlogImg/MethodChannel返回流程.jpg)
 
 小结：
 
