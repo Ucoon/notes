@@ -237,7 +237,7 @@ void paint(PaintingContext context, Offset offset) { }
 
 通过context.canvas可以获取到`Canvas`对象，接下来就可以调用`Canvas`API来实现具体的绘制逻辑。如果节点有子节点，它除了完成自身绘制逻辑之外，还要调用子节点的绘制方法
 
-### Flutter BuildContext VS Android Context
+### Flutter BuildContext  VS  Android Context
 
 #### Flutter BuildContext
 
@@ -252,7 +252,7 @@ abstract class BuildContext {
 官方的解释如下：
 
 ```dart
-BuildContextobjects are actually Element objects. The BuildContextinterface is used to discourage direct manipulation of Element objects
+BuildContext objects are actually Element objects. The BuildContext interface is used to discourage direct manipulation of Element objects
 ```
 
 即`BuildContext`就是widget对应的`Element`，所以我们可以通过`context`在`StatelessWidget`和`StatefulWidget`的`build`方法中直接访问`Element`对象。`BuildContext`接口用于阻止对`Element`对象的直接操作。

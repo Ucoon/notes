@@ -102,3 +102,14 @@ main() {
 func before-->func after-->Hello 2019
 ```
 
+# Isolate
+
+Dart为了利用多核CPU，将CPU层面的密集型计算进行了隔离设计，提供多线程机制，即`Isolate`。每个`Isolate`资源隔离，都有自己的Event Loop、Event Queue和Microtask Queue，`Isolate`之间的资源共享通过消息机制通信（和进程一样）
+
+此外Flutter中提供了执行并发计算任务的快捷方式—`compute函数`，其内部对`Isolate`的创建和双向通信进行了封装。
+
+# 总结
+
+- Future适合耗时小于16ms的操作
+- 可以通过compute()进行耗时操作
+- Dart是单线程模型，但也支持多线程，线程间数据不互通，可通过消息机制通信
